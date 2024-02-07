@@ -1,5 +1,5 @@
 from django.shortcuts import render
-
+from django.db.models import Sum
 from django.http import HttpResponse
 from django.db.models import Count
 import pandas as pd
@@ -12,16 +12,21 @@ from .models import ExcelData
 # Create your views here.
 def Home(request):
     eng_katta_tulovlar = ExcelData.objects.order_by('-tulov')[:10]
-
-    
-    return render(request, 'index.html',{'eng_katta_tulovlar':eng_katta_tulovlar})
+    excel_data = ExcelData.objects.all()
+    total_tulov = ExcelData.objects.aggregate(total_tulov=Sum('tulov'))
+    total_foyda = ExcelData.objects.aggregate(total_foyda=Sum('foyda'))
+    unique_company_count = ExcelData.objects.values('Company_name').distinct().count()
+    return render(request, 'index.html',{'eng_katta_tulovlar':eng_katta_tulovlar, 'excel_data':excel_data, 'total_tulov':total_tulov,'total_foyda':total_foyda, 'unique_company_count':unique_company_count})
 
 
 
 def Dashboard(request):
     eng_katta_tulovlar = ExcelData.objects.order_by('-tulov')[:10]
-
-    return render(request, 'dashboard.html',{'eng_katta_tulovlar':eng_katta_tulovlar})
+    excel_data = ExcelData.objects.all()
+    total_tulov = ExcelData.objects.aggregate(total_tulov=Sum('tulov'))
+    total_foyda = ExcelData.objects.aggregate(total_foyda=Sum('foyda'))
+    unique_company_count = ExcelData.objects.values('Company_name').distinct().count()
+    return render(request, 'dashboard.html',{'eng_katta_tulovlar':eng_katta_tulovlar, 'excel_data':excel_data, 'total_tulov':total_tulov,'total_foyda':total_foyda, 'unique_company_count':unique_company_count})
 
 def Documentation(request):
     return render(request, 'documentation.html')
