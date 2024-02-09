@@ -15,3 +15,13 @@ class ExcelData(models.Model):
 
     def __str__(self):
         return f'{self.ID_user} - {self.Company_name}'
+    
+
+class Contact(models.Model):
+    name = models.CharField(max_length=30)
+    email = models.EmailField(max_length=254, null=True)
+    message = models.TextField()
+
+    def __str__(self):
+        return self.name
+    

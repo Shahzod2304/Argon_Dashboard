@@ -3,7 +3,7 @@ from django.db.models import Sum
 from django.http import HttpResponse
 from django.db.models import Count
 import pandas as pd
-from .models import ExcelData
+from .models import ExcelData, Contact
 
 
 
@@ -35,6 +35,16 @@ def Profile(request):
     return render(request, 'profile.html')
 
 
+def Contact_data(request):
+    if request.method == "POST":
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        message = request.POST.get('message')
+        data_contact = Contact(name=name, email=email, message=message)
+        data_contact.save()
+    return render(request, 'dist/index.html')
+
+
 
 def Sign_In(request):
     return render(request, 'sign-in.html')
@@ -43,7 +53,7 @@ def Sign_Up(request):
     return render(request, 'sign-up.html')
 
 def Tables(request):
-    excel_data = ExcelData.objects.all()[:500]
+    excel_data = ExcelData.objects.all()
     dublikat_qatorlar = ExcelData.objects.values('ID_user', 'Company_name', 'User_name', 'price', 'tulov', 'foyda', 'chiqim', 'product0', 'firma', 'foiz').annotate(Count('id')).filter(id__count__gt=1)
     
     for qator in dublikat_qatorlar:

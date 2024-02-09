@@ -9,4 +9,5 @@ urlpatterns=[
     path('sign-in/', Sign_In, name='sign_in'),
     path('sign-up/', Sign_Up, name='sign_up'),
     path('tables/', Tables, name='tables'),
+    path('contact-sos/', Contact_data, name='contact'),
 ]
